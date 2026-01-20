@@ -1,0 +1,38 @@
+### Endpoint raíz
+GET http://127.0.0.1:8000
+
+###
+### Obtener todos los directores
+GET http://127.0.0.1:8000/directors
+
+###
+### Obtener director por ID (ejemplo - id=1)
+GET http://127.0.0.1:8000/directors/1
+
+###
+### Obtener director por ID (no existe)
+GET http://127.0.0.1:8000/directors/99
+
+###
+### Crear nuevo director (POST)
+POST http://127.0.0.1:8000/directors/
+Content-Type: application/json
+
+{
+  "name": "Christopher",
+  "surname": "Nolan"
+}
+
+###
+### Actualizar director existente (PUT)
+PUT http://127.0.0.1:8000/directors/1
+Content-Type: application/json
+
+{
+  "name": "Vince",
+  "surname": "Gilligan Updated"
+}
+
+###
+### Eliminar director
+DELETE http://127.0.0.1:8000/directors/1

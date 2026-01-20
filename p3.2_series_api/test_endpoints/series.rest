@@ -1,0 +1,48 @@
+### Endpoint raíz
+GET http://127.0.0.1:8000
+
+###
+### Obtener todas las series
+GET http://127.0.0.1:8000/series
+
+###
+### Obtener serie por ID (ejemplo - id=1)
+GET http://127.0.0.1:8000/series/1
+
+###
+### Obtener serie por ID (no existe)
+GET http://127.0.0.1:8000/series/99
+
+###
+### Crear nueva serie (POST)
+POST http://127.0.0.1:8000/series/
+Content-Type: application/json
+
+{
+  "titulo": "Game of Thrones",
+  "generos": ["Fantasía", "Drama", "Aventura"],
+  "puntuacion": 9.3,
+  "finalizada": true,
+  "fecha_estreno": "2011-04-17",
+  "temporadas": 8,
+  "director_id": 1
+}
+
+###
+### Actualizar serie existente (PUT)
+PUT http://127.0.0.1:8000/series/1
+Content-Type: application/json
+
+{
+  "titulo": "Breaking Bad Updated",
+  "generos": ["Drama", "Crimen", "Thriller", "Suspense"],
+  "puntuacion": 9.6,
+  "finalizada": true,
+  "fecha_estreno": "2008-01-20",
+  "temporadas": 5,
+  "director_id": 1
+}
+
+###
+### Eliminar serie
+DELETE http://127.0.0.1:8000/series/1
