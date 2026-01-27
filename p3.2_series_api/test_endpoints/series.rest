@@ -34,8 +34,8 @@ PUT http://127.0.0.1:8000/series/1
 Content-Type: application/json
 
 {
-  "titulo": "Breaking Bad Updated",
-  "generos": ["Drama", "Crimen", "Thriller", "Suspense"],
+  "titulo": "Breaking Bad",
+  "generos": ["Drama", "Crimen", "Thriller", "Suspense", "Acción"],
   "puntuacion": 9.6,
   "finalizada": true,
   "fecha_estreno": "2008-01-20",

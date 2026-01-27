@@ -110,11 +110,14 @@ def create_serie(serie: SerieCreate, db: Session = Depends(get_db)):
         puntuacion=serie.puntuacion,
         finalizada=serie.finalizada,
         fecha_estreno=serie.fecha_estreno,
-        temporadas=serie.temporadas
+        temporadas=serie.temporadas,
+        director_id=serie.director_id
     )
     db.add(new_serie)
     db.commit()
     db.refresh(new_serie)
+    # Reload with director relationship
+    new_serie = db.query(Serie).options(joinedload(Serie.director)).filter(Serie.id == new_serie.id).first()
     return serie_to_response(new_serie)
 
 @router.put("/{serie_id}", response_model=SerieResponse)
