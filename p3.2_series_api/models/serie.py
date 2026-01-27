@@ -5,7 +5,7 @@ from database.database import Base
 class Serie(Base):
     __tablename__ = "series"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     titulo = Column(String, nullable=False)
     generos = Column(String, nullable=False)  # comma-separated
     puntuacion = Column(Float, nullable=False)
