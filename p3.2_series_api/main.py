@@ -1,69 +1,39 @@
-from fastapi import FastAPI
-from sqlalchemy.orm import sessionmaker
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+import time
 
-from database.database import Base, engine, SessionLocal
+from database.database import Base, engine
 from routes import series, directors
-from models.serie import Serie
-from models.director import Director
 
+# Create database tables
 Base.metadata.create_all(bind=engine)
 
 # Seed initial data
-def seed_data():
-    db = SessionLocal()
-    try:
-        # Check if data already exists
-        if db.query(Serie).count() == 0:
-            # Create directors first
-            directors_data = [
-                Director(name="Vince", surname="Gilligan"),
-                Director(name="Matt", surname="Duffer"),
-                Director(name="Greg", surname="Daniels")
-            ]
-            db.add_all(directors_data)
-            db.commit()
-            db.refresh(directors_data[0])
-            db.refresh(directors_data[1])
-            db.refresh(directors_data[2])
+series.seed_data()
 
-            series_data = [
-                Serie(
-                    titulo="Breaking Bad",
-                    generos="Drama,Crimen,Thriller",
-                    puntuacion=9.5,
-                    finalizada=True,
-                    fecha_estreno="2008-01-20",
-                    temporadas=5,
-                    director_id=directors_data[0].id
-                ),
-                Serie(
-                    titulo="Stranger Things",
-                    generos="Ciencia Ficción,Terror,Drama",
-                    puntuacion=8.7,
-                    finalizada=False,
-                    fecha_estreno="2016-07-15",
-                    temporadas=4,
-                    director_id=directors_data[1].id
-                ),
-                Serie(
-                    titulo="The Office",
-                    generos="Comedia,Mockumentary",
-                    puntuacion=9.0,
-                    finalizada=True,
-                    fecha_estreno="2005-03-24",
-                    temporadas=9,
-                    director_id=directors_data[2].id
-                )
-            ]
-            db.add_all(series_data)
-            db.commit()
-    finally:
-        db.close()
-
-seed_data()
-
+# Create FastAPI app
 app = FastAPI()
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # En producción, especifica los orígenes permitidos
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Add custom middleware for logging request time
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    response.headers["X-Process-Time"] = str(process_time)
+    print(f"{request.method} {request.url.path} - {process_time:.4f}s")
+    return response
+
+# Include routers
 app.include_router(series.router)
 app.include_router(directors.router)
 
