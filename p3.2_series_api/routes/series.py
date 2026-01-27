@@ -27,9 +27,9 @@ def seed_data():
         if db.query(Serie).count() == 0:
             # Create directors first
             directors_data = [
-                Director(name="Vince", surname="Gilligan"),
-                Director(name="Matt", surname="Duffer"),
-                Director(name="Greg", surname="Daniels")
+                Director(name="Vince", surname="Gilligan", edad=57, lugar_nacimiento="Richmond, Virginia"),
+                Director(name="Matt", surname="Duffer", edad=40, lugar_nacimiento="Durham, North Carolina"),
+                Director(name="Greg", surname="Daniels", edad=61, lugar_nacimiento="New York City, New York")
             ]
             db.add_all(directors_data)
             db.commit()
