@@ -1,15 +1,19 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import time
+import os
 
 from database.database import Base, engine
 from routes import series, directors
 
 # Create database tables
-Base.metadata.create_all(bind=engine)
-
-# Seed initial data
-series.seed_data()
+try:
+    Base.metadata.create_all(bind=engine)
+    # Seed initial data only if not in production or explicitly allowed
+    if os.getenv("SEED_DATA", "true").lower() == "true":
+        series.seed_data()
+except Exception as e:
+    print(f"Warning: Error during database initialization: {e}")
 
 # Create FastAPI app
 app = FastAPI()
